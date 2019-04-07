@@ -11,7 +11,9 @@ describe 'jira' do
 
           context 'default params' do
             let(:params) do
-              { javahome: '/opt/java' }
+              {
+                javahome: '/opt/java'
+              }
             end
             let(:facts) do
               facts.merge(jira_version: '6.3.4a')

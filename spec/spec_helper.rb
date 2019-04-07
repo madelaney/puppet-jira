@@ -3,6 +3,7 @@
 # https://github.com/voxpupuli/modulesync_config
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet-facts'
+require 'pp'
 include RspecPuppetFacts
 
 if Dir.exist?(File.expand_path('../../lib', __FILE__))

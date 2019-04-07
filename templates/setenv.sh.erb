@@ -6,16 +6,16 @@ JIRA_HOME="<%= scope.lookupvar('jira::homedir') %>"
 #
 # Additional JAVA_OPTS
 #
-JAVA_OPTS="<%= scope.lookupvar('jira::java_opts') %> $JAVA_OPTS"
+JAVA_OPTS="<%= scope.lookupvar('jira::java_opts').join(' ') %> $JAVA_OPTS"
 #
 # Additional CATALINA_OPTS
 #
-CATALINA_OPTS="<%= scope.lookupvar('jira::catalina_opts') %> $CATALINA_OPTS"
+CATALINA_OPTS="<%= scope.lookupvar('jira::catalina_opts').join(' ' ) %> $CATALINA_OPTS"
 
 #
 #  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
 #
-JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope.lookupvar('jira::jvm_optional') %>"
+JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope.lookupvar('jira::jvm_optional').join(' ') %>"
 
 #
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.

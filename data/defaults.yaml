@@ -1,0 +1,100 @@
+---
+jira::product: jira
+jira::shell: /bin/false
+jira::manage_user: true
+jira::jira_name: jira
+jira::version: 6.4.1
+jira::format: tar.gz
+jira::installdir: /opt/jira
+jira::homedir: /opt/jira-home
+jira::user: jira
+jira::group: jira
+jira::db: postgresql
+jira::dbtype: postgres72
+jira::dbdriver: org.postgresql.Driver
+jira::dbuser: jiraadm
+jira::dbpassword: jiraadm
+jira::dbname: jira
+jira::dbschema: 'public'
+jira::poolsize: 20
+jira::enable_connection_pooling: false
+jira::pool_min_size: 20
+jira::pool_max_size: 20
+jira::pool_max_wait: 30000
+jira::min_evictable_idle_time: 60000
+jira::pool_max_idle: 20
+jira::pool_remove_abandoned: true
+jira::pool_remove_abandoned_timeout: 300
+jira::pool_test_while_idle: true
+jira::pool_test_on_borrow: true
+jira::dbserver: localhost
+jira::javahome: /opt/java/jdk1.6.0_33
+jira::download_url: 'https://product-downloads.atlassian.com/software/jira/downloads'
+jira::service_manage: true
+jira::service_ensure: running
+jira::service_enable: true
+jira::tomcat_max_threads:  150
+jira::tomcat_accept_count: 100
+jira::proxy:
+  scheme:    'https'
+  proxyName: 'www.exmaple.co.za'
+  proxyPort: '443'
+jira::ajp:
+  port:         '8009'
+  redirectPort: '8443'
+  protocol:     'AJP/1.3'
+jira::contextpath: ''
+jira::config_properties:
+  jira.websudo.is.disabled: true
+jira::datacenter: false
+jira::poolsize: 20
+jira::mysql_connector_url: https://dev.mysql.com/get/Downloads/Connector-J
+jira::download_url: https://product-downloads.atlassian.com/software/jira/downloads
+jira::tomcat_keystore_file: "%{hiera('jira::installdir')}/jira.jks"
+jira::tomcat_keystore_type: JKS
+jira::tomcat_max_threads: 150
+jira::tomcat_accept_count: 100
+jira::enable_sso: false
+jira::tomcat_accesslog_format: '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;'
+jira::crowd_base_url: "https://crowd.%{hiera('domain')}"
+jira::application_login_url: "%{hiera('jira::crowd_base_url')}/console"
+jira::crowd_server_url:  "%{hiera('jira::crowd_base_url')}/services"
+jira::session_validationinterval: 5
+jira::session_tokenkey: session.tokenkey
+jira::session_isauthenticated: session.isauthenticated
+jira::session_lastvalidation: session.lastvalidation
+jira::proxy_type: none
+jira::script_check_java_manage: false
+jira::script_check_java_template: jira/check-java.sh.erb
+#jira::tomcat_address: 127.0.0.1
+jira::tomcat_address: null
+jira::tomcat_port: 8080
+jira::tomcat_shutdown_port: 8085
+jira::tomcat_max_http_header_size: 8192
+jira::tomcat_min_spare_threads: 25
+jira::tomcat_connection_timeout: 20000
+jira::tomcat_enable_lookups: false
+jira::tomcat_native_ssl: false
+jira::tomcat_https_port: 8443
+jira::tomcat_protocol: HTTP/1.1
+jira::tomcat_key_alias: jira
+jira::tomcat_disable_upload_timeout: true
+jira::tomcat_use_body_encoding_for_uri: true
+jira::tomcat_keystore_pass: changeit
+jira::stop_jira: 'service jira stop && sleep 15'
+jira::json_packages:
+  - rubygem-json
+  - ruby-json
+jira::service_file_location: /etc/init.d/jira
+jira::service_file_template: jira/jira.initscript.erb
+jira::service_lockfile: /var/lock/subsys/jira
+jira::service_provider: null
+jira::mysql_connector_version: 5.1.34
+jira::mysql_connector_install: /opt/MySQL-connector
+jira::mysql_connector_format: tar.gz
+jira::mysql_connector_product: mysql-connector-java
+jira::java_opts:
+  - '-XX:-HeapDumpOnOutOfMemoryError'
+jira::jvm_xms: 256m
+jira::jvm_xmx: 1024m
+jira::jvm_permgen: 256m

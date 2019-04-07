@@ -31,132 +31,134 @@
 # Published under the Apache License, Version 2.0
 #
 class jira (
-
-  # Jira Settings
-  String $version                                                   = '6.4.1',
-  String $product                                                   = 'jira',
-  String $format                                                    = 'tar.gz',
-  Stdlib::Absolutepath $installdir                                  = '/opt/jira',
-  Stdlib::Absolutepath $homedir                                     = '/home/jira',
-  Boolean $manage_user                                              = true,
-  String $user                                                      = 'jira',
-  String $group                                                     = 'jira',
-  $uid                                                              = undef,
-  $gid                                                              = undef,
-  Stdlib::Absolutepath $shell                                       = '/bin/true',
-  # Advanced configuration options
-  Boolean $enable_secure_admin_sessions                             = true,
-  Hash $jira_config_properties                                      = {},
-  Boolean $datacenter                                               = false,
-  $shared_homedir                                                   = undef,
-  Optional[Stdlib::Host] $ehcache_listener_host                     = undef,
-  Optional[Stdlib::Port] $ehcache_listener_port                     = undef,
-  Optional[Stdlib::Port] $ehcache_object_port                       = undef,
-  # Database Settings
-  Enum['postgresql','mysql','sqlserver','oracle','h2'] $db          = 'postgresql',
-  $dbuser                                                           = 'jiraadm',
-  $dbpassword                                                       = 'mypassword',
-  $dbserver                                                         = 'localhost',
-  $dbname                                                           = 'jira',
-  Optional[Variant[Integer,String]] $dbport                         = undef,
-  Optional[String] $dbdriver                                        = undef,
-  Optional[String] $dbtype                                          = undef,
-  Optional[String] $dburl                                           = undef,
-  $poolsize                                                         = '20',
-  $dbschema                                                         = 'public',
-  # MySQL Connector Settings
-  $mysql_connector_manage                                           = true,
-  $mysql_connector_version                                          = '5.1.34',
-  $mysql_connector_product                                          = 'mysql-connector-java',
-  $mysql_connector_format                                           = 'tar.gz',
-  Stdlib::Absolutepath $mysql_connector_install                     = '/opt/MySQL-connector',
-  Stdlib::HTTPUrl $mysql_connector_url                              = 'https://dev.mysql.com/get/Downloads/Connector-J',
+  String $version,
+  String $format,
+  Stdlib::Absolutepath $installdir,
+  Stdlib::Absolutepath $homedir,
+  Boolean $manage_user,
+  String $user,
+  String $group,
+  Optional[Integer] $uid = undef,
+  Optional[Integer] $gid = undef,
+  Stdlib::Absolutepath $shell,
+  Hash $config_properties,
+  Boolean $datacenter,
+  Optional[String] $product,
+  Enum['postgresql','mysql','sqlserver','oracle','h2'] $db,
+  Optional[Stdlib::Absolutepath] $shared_homedir = undef,
+  Optional[Stdlib::Host] $ehcache_listener_host = undef,
+  Optional[Stdlib::Port] $ehcache_listener_port = undef,
+  Optional[Stdlib::Port] $ehcache_object_port = undef,
+  Optional[String] $dbuser = undef,
+  Optional[String] $dbpassword = undef,
+  Optional[String] $dbserver = undef,
+  Optional[String] $dbname = undef,
+  Optional[Integer] $dbport = undef,
+  Optional[String] $dbdriver = undef,
+  Optional[String] $dbtype = undef,
+  Optional[String] $dburl = undef,
+  Optional[Integer] $poolsize = undef,
+  Optional[String] $dbschema = undef,
+  Optional[Boolean] $mysql_connector_manage = undef,
+  Optional[String] $mysql_connector_version = undef,
+  Optional[String] $mysql_connector_product = undef,
+  Optional[String] $mysql_connector_format = undef,
+  Optional[Stdlib::Absolutepath] $mysql_connector_install,
+  Optional[Stdlib::HTTPUrl] $mysql_connector_url = undef,
   # Configure database settings if you are pooling connections
-  $enable_connection_pooling                                        = false,
-  $pool_min_size                                                    = 20,
-  $pool_max_size                                                    = 20,
-  $pool_max_wait                                                    = 30000,
-  $validation_query                                                 = undef,
-  $min_evictable_idle_time                                          = 60000,
-  $time_between_eviction_runs                                       = undef,
-  $pool_max_idle                                                    = 20,
-  $pool_remove_abandoned                                            = true,
-  $pool_remove_abandoned_timeout                                    = 300,
-  $pool_test_while_idle                                             = true,
-  $pool_test_on_borrow                                              = false,
+  Optional[Boolean] $enable_connection_pooling = undef,
+  Optional[Integer] $pool_min_size = undef,
+  Optional[Integer] $pool_max_size = undef,
+  Optional[Integer] $pool_max_wait = undef,
+  Optional[String] $validation_query = undef,
+  Optional[Integer] $min_evictable_idle_time = undef,
+  Optional[Integer] $time_between_eviction_runs = undef,
+  Optional[Integer] $pool_max_idle = undef,
+  Optional[Boolean] $pool_remove_abandoned = undef,
+  Optional[Integer] $pool_remove_abandoned_timeout = undef,
+  Optional[Boolean] $pool_test_while_idle = undef,
+  Optional[Boolean] $pool_test_on_borrow = undef,
   # JVM Settings
-  $javahome                                                         = undef,
-  $jvm_xms                                                          = '256m',
-  $jvm_xmx                                                          = '1024m',
-  $jvm_permgen                                                      = '256m',
-  $jvm_optional                                                     = '-XX:-HeapDumpOnOutOfMemoryError',
-  $java_opts                                                        = '',
-  $catalina_opts                                                    = '',
+  Optional[String] $javahome,
+  Optional[String] $jvm_xms,
+  Optional[String] $jvm_xmx,
+  Optional[String] $jvm_permgen,
+  Optional[Array] $jvm_optional = [],
+  Optional[Array] $java_opts = [],
+  Optional[Array] $catalina_opts = [],
   # Misc Settings
-  Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
-  $checksum                                                         = undef,
-  $disable_notifications                                            = false,
+  Optional[Stdlib::HTTPUrl] $download_url,
+  Optional[String] $checksum = undef,
+  Optional[Boolean] $disable_notifications = undef,
   # Choose whether to use puppet-staging, or puppet-archive
-  $deploy_module                                                    = 'archive',
-  $proxy_server                                                     = undef,
-  Optional[Enum['none','http','https','ftp']] $proxy_type           = undef,
+  Optional[String] $proxy_server = undef,
+  Optional[Enum['none','http','https','ftp']] $proxy_type,
   # Manage service
-  $service_manage                                                   = true,
-  $service_ensure                                                   = running,
-  $service_enable                                                   = true,
-  $service_notify                                                   = undef,
-  $service_subscribe                                                = undef,
+  Optional[Boolean] $service_manage,
+  Optional[Enum['running', 'stopped']] $service_ensure,
+  Optional[Boolean] $service_enable,
+  Optional[String] $service_notify = undef,
+  Optional[String] $service_subscribe = undef,
   # Command to stop jira in preparation to updgrade. This is configurable
   # incase the jira service is managed outside of puppet. eg: using the
   # puppetlabs-corosync module: 'crm resource stop jira && sleep 15'
-  $stop_jira                                                        = 'service jira stop && sleep 15',
+  Optional[String] $stop_jira,
   # Whether to manage the 'check-java.sh' script, and where to retrieve
   # the script from.
-  $script_check_java_manage                                         = false,
-  $script_check_java_template                                       = 'jira/check-java.sh.erb',
+  Optional[Boolean] $script_check_java_manage,
+  Optional[String] $script_check_java_template,
   # Tomcat
-  $tomcat_address                                                   = undef,
-  $tomcat_port                                                      = 8080,
-  $tomcat_shutdown_port                                             = 8005,
-  $tomcat_max_http_header_size                                      = '8192',
-  $tomcat_min_spare_threads                                         = '25',
-  $tomcat_connection_timeout                                        = '20000',
-  $tomcat_enable_lookups                                            = false,
-  $tomcat_native_ssl                                                = false,
-  $tomcat_https_port                                                = 8443,
-  Optional[Integer] $tomcat_redirect_https_port                     = undef,
-  $tomcat_protocol                                                  = 'HTTP/1.1',
-  $tomcat_protocol_ssl                                              = undef,
-  $tomcat_use_body_encoding_for_uri                                 = true,
-  $tomcat_disable_upload_timeout                                    = true,
-  $tomcat_key_alias                                                 = 'jira',
-  Stdlib::Absolutepath $tomcat_keystore_file                        = '/home/jira/jira.jks',
-  $tomcat_keystore_pass                                             = 'changeit',
-  Enum['JKS', 'JCEKS', 'PKCS12'] $tomcat_keystore_type              = 'JKS',
-  $tomcat_accesslog_format                                          = '%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;',
+  Optional[String] $tomcat_address,
+  Optional[Integer] $tomcat_port,
+  Optional[Integer] $tomcat_shutdown_port,
+  Optional[Integer] $tomcat_max_http_header_size,
+  Optional[Integer] $tomcat_min_spare_threads,
+  Optional[Integer] $tomcat_connection_timeout,
+  Optional[Boolean] $tomcat_enable_lookups,
+  Optional[Boolean] $tomcat_native_ssl,
+  Optional[Integer] $tomcat_https_port,
+  Optional[Integer] $tomcat_redirect_https_port = undef,
+  Optional[String] $tomcat_protocol,
+  Optional[String] $tomcat_protocol_ssl = undef,
+  Optional[Boolean] $tomcat_use_body_encoding_for_uri,
+  Optional[Boolean] $tomcat_disable_upload_timeout,
+  Optional[String] $tomcat_key_alias,
+  Optional[Stdlib::Absolutepath] $tomcat_keystore_file,
+  Optional[String] $tomcat_keystore_pass,
+  Optional[Enum['JKS', 'JCEKS', 'PKCS12']] $tomcat_keystore_type,
+  Optional[String] $tomcat_accesslog_format,
   # Tomcat Tunables
-  $tomcat_max_threads                                               = '150',
-  $tomcat_accept_count                                              = '100',
+  Optional[Integer] $tomcat_max_threads,
+  Optional[Integer] $tomcat_accept_count,
   # Reverse https proxy
-  Hash $proxy                                                       = {},
+  Optional[Hash] $proxy,
   # Options for the AJP connector
-  Hash $ajp                                                         = {},
-  # Context path (usualy used in combination with a reverse proxy)
-  String $contextpath                                               = '',
+  Optional[Hash] $ajp,
+  # Context path (usually used in combination with a reverse proxy)
+  Optional[String] $contextpath,
   # Resources for context.xml
-  Hash $resources                                                   = {},
+  Optional[Hash] $resources = {},
   # Enable SingleSignOn via Crowd
-  Boolean $enable_sso                                               = false,
-  String $application_name                                          = 'crowd',
-  String $application_password                                      = '1234',
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $application_login_url = 'https://crowd.example.com/console/',
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $crowd_server_url      = 'https://crowd.example.com/services/',
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $crowd_base_url        = 'https://crowd.example.com/',
-  String $session_isauthenticated                                   = 'session.isauthenticated',
-  String $session_tokenkey                                          = 'session.tokenkey',
-  Integer $session_validationinterval                               = 5,
-  String $session_lastvalidation                                    = 'session.lastvalidation',
-) inherits jira::params {
+  Optional[Boolean] $enable_sso,
+  Optional[String] $application_name = undef,
+  Optional[String] $application_password = undef,
+  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $application_login_url,
+  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $crowd_server_url,
+  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $crowd_base_url,
+  Optional[String] $session_isauthenticated = undef,
+  Optional[String] $session_tokenkey = undef,
+  Optional[Integer] $session_validationinterval = undef,
+  Optional[String] $session_lastvalidation = undef,
+  Optional[Array] $json_packages = [],
+  Optional[String] $service_file_location,
+  Optional[String] $service_file_template,
+  Optional[String] $service_lockfile,
+  Optional[String] $service_provider
+) {
+
+  Exec {
+    path => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/']
+  }
 
   if $datacenter and !$shared_homedir {
     fail("\$shared_homedir must be set when \$datacenter is true")
@@ -164,14 +166,16 @@ class jira (
 
   if $tomcat_redirect_https_port {
     unless ($tomcat_native_ssl) {
-        fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
+      fail('You need to set native_ssl to true when using tomcat_redirect_https_port')
     }
   }
 
   # The default Jira product starting with version 7 is 'jira-software'
+  # The default Jira product starting with version 7 is 'jira-software'
   if ((versioncmp($version, '7.0.0') > 0) and ($product == 'jira')) {
     $product_name = 'jira-software'
-  } else {
+  }
+  else {
     $product_name = $product
   }
 
@@ -195,11 +199,11 @@ class jira (
     $dbport_real = $dbport
   } else {
     $dbport_real = $db ? {
-      'postgresql' => '5432',
-      'mysql'      => '3306',
-      'oracle'     => '1521',
-      'sqlserver'  => '1433',
-      'h2'         => '',
+      'postgresql' => 5432,
+      'mysql'      => 3306,
+      'oracle'     => 1521,
+      'sqlserver'  => 1433,
+      'h2'         => undef,
     }
   }
 
@@ -262,8 +266,6 @@ class jira (
       assert_type(Enum['AJP/1.3', 'org.apache.coyote.ajp', 'org.apache.coyote.ajp.AjpNioProtocol'], $ajp['protocol'])
     }
   }
-
-  $merged_jira_config_properties = merge({'jira.websudo.is.disabled' => !$enable_secure_admin_sessions}, $jira_config_properties)
 
   if $javahome == undef {
     fail('You need to specify a value for javahome')

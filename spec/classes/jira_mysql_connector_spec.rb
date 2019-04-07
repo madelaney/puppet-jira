@@ -15,6 +15,7 @@ describe 'jira' do
                 version: '6.3.4a',
                 javahome: '/opt/java',
                 db: 'mysql',
+                mysql_connector_manage: true,
                 mysql_connector_version: '5.1.34'
               }
             end
@@ -29,9 +30,11 @@ describe 'jira' do
                 )
             end
             it 'deploys mysql connector 5.1.34 from tar.gz' do
-              is_expected.to contain_staging__file('mysql-connector-java-5.1.34.tar.gz').with('source' => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz')
-              is_expected.to contain_staging__extract('mysql-connector-java-5.1.34.tar.gz').with('target' => '/opt/MySQL-connector',
-                                                                                                 'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
+              is_expected.to contain_archive('/opt/MySQL-connector/mysql-connector-java-5.1.34.tar.gz').with(
+                'source'  => 'https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.tar.gz',
+                'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
+              #is_expected.to contain_staging__extract('mysql-connector-java-5.1.34.tar.gz').with('target' => '/opt/MySQL-connector',
+              #                                                                                   'creates' => '/opt/MySQL-connector/mysql-connector-java-5.1.34')
             end
           end
           context 'mysql connector overwrite params' do
@@ -40,6 +43,7 @@ describe 'jira' do
                 version: '6.3.4a',
                 javahome: '/opt/java',
                 db: 'mysql',
+                mysql_connector_manage: true,
                 mysql_connector_version: '5.1.15',
                 mysql_connector_format: 'zip',
                 mysql_connector_install: '/opt/foo',
@@ -56,9 +60,11 @@ describe 'jira' do
                 )
             end
             it 'deploys mysql connector 5.1.15 from zip' do
-              is_expected.to contain_staging__file('mysql-connector-java-5.1.15.zip').with('source' => 'http://example.co.za/foo/mysql-connector-java-5.1.15.zip')
-              is_expected.to contain_staging__extract('mysql-connector-java-5.1.15.zip').with('target' => '/opt/foo',
-                                                                                              'creates' => '/opt/foo/mysql-connector-java-5.1.15')
+              is_expected.to contain_archive('/opt/foo/mysql-connector-java-5.1.15.zip').with(
+                'source'  => 'http://example.co.za/foo/mysql-connector-java-5.1.15.zip',
+                'creates' => '/opt/foo/mysql-connector-java-5.1.15')
+              #is_expected.to contain_staging__extract('mysql-connector-java-5.1.15.zip').with('target' => '/opt/foo',
+              #                                                                                'creates' => '/opt/foo/mysql-connector-java-5.1.15')
             end
           end
           context 'mysql_connector_mangage equals false' do

@@ -20,35 +20,39 @@ class jira::service(
   Boolean $service_enable = $jira::service_enable,
   $service_notify         = $jira::service_notify,
   $service_subscribe      = $jira::service_subscribe,
-  $service_file_location  = $jira::params::service_file_location,
-  $service_file_template  = $jira::params::service_file_template,
-  $service_lockfile       = $jira::params::service_lockfile,
-  $service_provider       = $jira::params::service_provider,
+  $service_file_location  = $jira::service_file_location,
+  $service_file_template  = $jira::service_file_template,
+  $service_lockfile       = $jira::service_lockfile,
+  $service_provider       = $jira::service_provider,
 
-) inherits jira::params {
+) {
 
-  file { $service_file_location:
-    content => template($service_file_template),
-    mode    => '0755',
+  file {
+    $service_file_location:
+      content => template($service_file_template),
+      mode    => '0755'
   }
 
   if $service_manage {
     if $service_provider == 'systemd' {
-      exec { 'refresh_systemd':
-        command     => 'systemctl daemon-reload',
-        refreshonly => true,
-        subscribe   => File[$service_file_location],
-        before      => Service['jira'],
+      exec {
+        'refresh_systemd':
+          command     => 'systemctl daemon-reload',
+          path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
+          refreshonly => true,
+          subscribe   => File[$service_file_location],
+          before      => Service['jira']
       }
     }
 
-    service { 'jira':
-      ensure    => $service_ensure,
-      enable    => $service_enable,
-      require   => File[$service_file_location],
-      notify    => $service_notify,
-      subscribe => $service_subscribe,
-      provider  => $service_provider,
+    service {
+      'jira':
+        ensure    => $service_ensure,
+        enable    => $service_enable,
+        require   => File[$service_file_location],
+        notify    => $service_notify,
+        subscribe => $service_subscribe,
+        provider  => $service_provider
     }
   }
 }

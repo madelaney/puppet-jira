@@ -2,6 +2,7 @@ require 'beaker-rspec'
 require 'beaker-puppet'
 require 'beaker/puppet_install_helper'
 require 'beaker/module_install_helper'
+require 'pp'
 
 run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
 install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ %r{pe}i

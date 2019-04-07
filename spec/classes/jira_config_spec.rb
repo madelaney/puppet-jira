@@ -25,11 +25,11 @@ describe 'jira' do
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file('/opt/jira-home/dbconfig.xml').
                 with_content(%r{jdbc:postgresql://localhost:5432/jira}).
                 with_content(%r{<schema-name>public</schema-name>})
             end
-            it { is_expected.not_to contain_file('/home/jira/cluster.properties') }
+            it { is_expected.not_to contain_file('/opt/jira-home/cluster.properties') }
             it { is_expected.not_to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/check-java.sh') }
           end
 
@@ -46,7 +46,7 @@ describe 'jira' do
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file('/opt/jira-home/dbconfig.xml').
                 with_content(%r{jdbc:mysql://localhost:3306/jira})
             end
           end
@@ -57,7 +57,7 @@ describe 'jira' do
                 version: '6.3.4a',
                 javahome: '/opt/java',
                 db: 'sqlserver',
-                dbport: '1433',
+                dbport: 1433,
                 dbschema: 'public'
               }
             end
@@ -66,7 +66,7 @@ describe 'jira' do
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/bin/user.sh') }
             it { is_expected.to contain_file('/opt/jira/atlassian-jira-6.3.4a-standalone/conf/server.xml') }
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file('/opt/jira-home/dbconfig.xml').
                 with_content(%r{<schema-name>public</schema-name>})
             end
           end
@@ -81,17 +81,17 @@ describe 'jira' do
             end
 
             it do
-              is_expected.to contain_file('/home/jira/dbconfig.xml').
+              is_expected.to contain_file('/opt/jira-home/dbconfig.xml').
                 with_content(%r{<url>my custom dburl</url>})
             end
           end
 
-          context 'customise tomcat connector' do
+          context 'customize tomcat connector' do
             let(:params) do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_port: '9229'
+                tomcat_port: 9229
               }
             end
 
@@ -152,7 +152,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_port: '9229',
+                tomcat_port: 9229,
                 tomcat_address: '127.0.0.1'
               }
             end
@@ -183,7 +183,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_port: '8888'
+                tomcat_port: 8888
               }
             end
 
@@ -198,7 +198,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_accept_count: '200'
+                tomcat_accept_count: 200
               }
             end
 
@@ -213,7 +213,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_max_http_header_size: '4096'
+                tomcat_max_http_header_size: 4096
               }
             end
 
@@ -228,7 +228,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_min_spare_threads: '50'
+                tomcat_min_spare_threads: 50
               }
             end
 
@@ -243,7 +243,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_connection_timeout: '25000'
+                tomcat_connection_timeout: 25000
               }
             end
 
@@ -258,7 +258,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_enable_lookups: 'true'
+                tomcat_enable_lookups: true
               }
             end
 
@@ -288,7 +288,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_use_body_encoding_for_uri: 'false'
+                tomcat_use_body_encoding_for_uri: false
               }
             end
 
@@ -303,7 +303,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_disable_upload_timeout: 'false'
+                tomcat_disable_upload_timeout: false
               }
             end
 
@@ -318,7 +318,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_enable_lookups: 'true'
+                tomcat_enable_lookups: true
               }
             end
 
@@ -333,7 +333,7 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                tomcat_max_threads: '300'
+                tomcat_max_threads: 300
               }
             end
 
@@ -351,7 +351,7 @@ describe 'jira' do
                 proxy: {
                   'scheme'    => 'https',
                   'proxyName' => 'www.example.com',
-                  'proxyPort' => '9999'
+                  'proxyPort' => 9999
                 }
               }
             end
@@ -475,7 +475,7 @@ describe 'jira' do
                 with_content(%r{redirectPort="8443"}).
                 with_content(%r{port="8443"}).
                 with_content(%r{keyAlias="jira"}).
-                with_content(%r{keystoreFile="/home/jira/jira.jks"}).
+                with_content(%r{keystoreFile="/opt/jira/jira.jks"}).
                 with_content(%r{keystorePass="changeit"}).
                 with_content(%r{keystoreType="JKS"}).
                 with_content(%r{port="8443".*acceptCount="100"}m).
@@ -489,10 +489,10 @@ describe 'jira' do
                 version: '6.3.4a',
                 javahome: '/opt/java',
                 tomcat_native_ssl: true,
-                tomcat_https_port: '9443',
+                tomcat_https_port: 9443,
                 tomcat_address: '127.0.0.1',
-                tomcat_max_threads: '600',
-                tomcat_accept_count: '600',
+                tomcat_max_threads: 600,
+                tomcat_accept_count: 600,
                 tomcat_key_alias: 'keystorealias',
                 tomcat_keystore_file: '/tmp/keyfile.ks',
                 tomcat_keystore_pass: 'keystorepass',
@@ -519,12 +519,14 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                enable_secure_admin_sessions: true
+                config_properties: {
+                  'jira.websudo.is.disabled' => false
+                }
               }
             end
 
             it do
-              is_expected.to contain_file('/home/jira/jira-config.properties').
+              is_expected.to contain_file('/opt/jira-home/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = false})
             end
           end
@@ -533,13 +535,12 @@ describe 'jira' do
             let(:params) do
               {
                 version: '6.3.4a',
-                javahome: '/opt/java',
-                enable_secure_admin_sessions: false
+                javahome: '/opt/java'
               }
             end
 
             it do
-              is_expected.to contain_file('/home/jira/jira-config.properties').
+              is_expected.to contain_file('/opt/jira-home/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = true})
             end
           end
@@ -549,14 +550,15 @@ describe 'jira' do
               {
                 version: '6.3.4a',
                 javahome: '/opt/java',
-                jira_config_properties: {
-                  'ops.bar.group.size.opsbar-transitions' => '4'
+                config_properties: {
+                  'ops.bar.group.size.opsbar-transitions' => '4',
+                  'jira.websudo.is.disabled' => false
                 }
               }
             end
 
             it do
-              is_expected.to contain_file('/home/jira/jira-config.properties').
+              is_expected.to contain_file('/opt/jira-home/jira-config.properties').
                 with_content(%r{jira.websudo.is.disabled = false}).
                 with_content(%r{ops.bar.group.size.opsbar-transitions = 4})
             end
@@ -573,7 +575,7 @@ describe 'jira' do
             end
 
             it do
-              is_expected.to contain_file('/home/jira/cluster.properties').
+              is_expected.to contain_file('/opt/jira-home/cluster.properties').
                 with_content(%r{jira.node.id = \S+}).
                 with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir})
             end
@@ -593,7 +595,7 @@ describe 'jira' do
             end
 
             it do
-              is_expected.to contain_file('/home/jira/cluster.properties').
+              is_expected.to contain_file('/opt/jira-home/cluster.properties').
                 with_content(%r{jira.node.id = \S+}).
                 with_content(%r{jira.shared.home = /mnt/jira_shared_home_dir}).
                 with_content(%r{ehcache.listener.hostName = jira.foo.net}).

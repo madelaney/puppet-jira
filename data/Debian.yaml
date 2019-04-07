@@ -1,0 +1,7 @@
+---
+jira::json_packages:
+  - ruby-json
+jira::service_file_location: /lib/systemd/system/jira.service
+jira::service_file_template: jira/jira.service.erb
+jira::service_lockfile: /var/lock/subsys/jira
+jira::service_provider: systemd

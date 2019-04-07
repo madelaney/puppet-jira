@@ -1,0 +1,8 @@
+---
+jira::json_packages:
+  - rubygem-json
+  - ruby-json
+jira::service_file_location: /etc/init.d/jira
+jira::service_file_template: jira/jira.initscript.erb
+jira::service_lockfile: /var/lock/jira
+jira::service_provider: debian
